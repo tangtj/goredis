@@ -102,3 +102,11 @@ func (l *List) GetNode(idx int) *Node {
 func (l List) GetLen() uint {
 	return uint(l.len)
 }
+
+func NewList() *List {
+	return &List{
+		head: nil,
+		tail: nil,
+		len:  0,
+	}
+}

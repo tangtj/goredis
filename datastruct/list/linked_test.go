@@ -2,101 +2,63 @@ package list
 
 import (
 	. "github.com/smartystreets/goconvey/convey"
-	"reflect"
 	"testing"
 )
 
 func TestList_AddNodeHead(t *testing.T) {
-	type fields struct {
-		head *Node
-		tail *Node
-		len  int
-	}
-	type args struct {
-		value interface{}
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   *List
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			l := &List{
-				head: tt.fields.head,
-				tail: tt.fields.tail,
-				len:  tt.fields.len,
-			}
-			if got := l.AddNodeHead(tt.args.value); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("AddNodeHead() = %v, want %v", got, tt.want)
-			}
+	Convey("add node to head", t, func() {
+		l := List{}
+		Convey("add one node to head", func() {
+			l.AddNodeHead(1)
+			So(l.GetLen(), ShouldEqual, 1)
+			So(l.head.value, ShouldEqual, 1)
+			So(l.tail.value, ShouldEqual, 1)
 		})
-	}
+		Convey("add tow node to head", func() {
+			l.AddNodeHead(1)
+			l.AddNodeHead(2)
+			So(l.GetLen(), ShouldEqual, 2)
+			So(l.head.value, ShouldEqual, 2)
+			So(l.tail.value, ShouldEqual, 1)
+		})
+	})
 }
 
 func TestList_AddNodeTail(t *testing.T) {
-	type fields struct {
-		head *Node
-		tail *Node
-		len  int
-	}
-	type args struct {
-		value interface{}
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   *List
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			l := &List{
-				head: tt.fields.head,
-				tail: tt.fields.tail,
-				len:  tt.fields.len,
-			}
-			if got := l.AddNodeTail(tt.args.value); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("AddNodeTail() = %v, want %v", got, tt.want)
-			}
+	Convey("add node to tail", t, func() {
+		l := List{}
+		Convey("add one node to tail", func() {
+			l.AddNodeTail(1)
+			So(l.GetLen(), ShouldEqual, 1)
+			So(l.head.value, ShouldEqual, 1)
+			So(l.tail.value, ShouldEqual, 1)
 		})
-	}
+		Convey("add tow node to tail", func() {
+			l.AddNodeTail(1)
+			l.AddNodeTail(2)
+			So(l.GetLen(), ShouldEqual, 2)
+			So(l.head.value, ShouldEqual, 1)
+			So(l.tail.value, ShouldEqual, 2)
+		})
+	})
+
 }
 
 func TestList_DelNode(t *testing.T) {
-	type fields struct {
-		head *Node
-		tail *Node
-		len  int
-	}
-	type args struct {
-		node *Node
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   *List
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			l := &List{
-				head: tt.fields.head,
-				tail: tt.fields.tail,
-				len:  tt.fields.len,
-			}
-			if got := l.DelNode(tt.args.node); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DelNode() = %v, want %v", got, tt.want)
-			}
+	Convey("del node", t, func() {
+		l := List{}
+		l.AddNodeTail(1)
+		Convey("del nil", func() {
+			l.DelNode(nil)
+			So(l.GetLen(), ShouldEqual, 1)
 		})
-	}
+		Convey("del one", func() {
+			node := l.GetNode(0)
+			l.DelNode(node)
+			So(l.GetLen(), ShouldEqual, 0)
+		})
+	})
+
 }
 
 func TestList_GetIdx(t *testing.T) {
