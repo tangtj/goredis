@@ -1,11 +1,5 @@
 package list
 
-type Node struct {
-	prev  *Node
-	next  *Node
-	value interface{}
-}
-
 type List struct {
 	//listNode *head;
 	//listNode *tail;
@@ -107,13 +101,4 @@ func (l *List) GetNode(idx int) *Node {
 
 func (l List) GetLen() uint {
 	return uint(l.len)
-}
-
-func (n *Node) GetValue() interface{} {
-	return n.value
-}
-
-// GetNext is get node next
-func (n *Node) GetNext() *Node {
-	return n.next
 }

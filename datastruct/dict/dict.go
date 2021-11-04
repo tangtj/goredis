@@ -45,7 +45,7 @@ func (dict *Dict) Find(key string) (interface{}, error) {
 		}
 
 	}
-	return nil
+	return nil, nil
 }
 
 func genCaseHashFunction(key string) uint {
