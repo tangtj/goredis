@@ -3,8 +3,9 @@ package handler
 import (
 	"bufio"
 	"context"
-	"goredis/interface/cmd"
-	"goredis/interface/server"
+	"goredis/inf/cmd"
+	"goredis/inf/server"
+	"goredis/redis"
 	"goredis/redis/parse"
 	"log"
 	"net"
@@ -13,7 +14,7 @@ import (
 var _ server.Handler = (*Handler)(nil)
 
 type Handler struct {
-	options map[string]cmd.Cmder
+	Db *redis.Db
 }
 
 func NewHandler(options ...Apply) server.Handler {
@@ -22,7 +23,6 @@ func NewHandler(options ...Apply) server.Handler {
 	for _, f := range options {
 		f(o)
 	}
-	h.options = o.command
 	return &h
 }
 
@@ -44,16 +44,9 @@ func (h *Handler) Handle(ctx context.Context, conn net.Conn) {
 			r := parse.Array(reader)
 
 			c := string(r[0])
-			reply := h.exec(c, r[1:])
+			reply := h.Db.Exec(c, r[1:])
 			conn.Write(reply.Reply())
 		}
 	}
 
-}
-
-func (h *Handler) exec(c string, args [][]byte) cmd.Reply {
-	if c, ok := h.options[c]; ok {
-		return c.Exec(args)
-	}
-	return cmd.NewByteReply([]byte("unSupport command"))
 }

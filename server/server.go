@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"goredis/interface/server"
+	"goredis/inf/server"
 	"log"
 	"net"
 )

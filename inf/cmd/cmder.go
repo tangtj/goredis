@@ -1,5 +1,9 @@
 package cmd
 
+import (
+	"goredis/inf"
+)
+
 const (
 	SimpleString = '+'
 	Error        = '-'
@@ -7,9 +11,7 @@ const (
 	Array        = '*'
 	CR           = '\r'
 	LF           = '\n'
+	CRLF         = "\r\n"
 )
 
-type Cmder interface {
-	Cmd() string
-	Exec(args [][]byte) Reply
-}
+type CmderFunc func(db inf.DB, args [][]byte) Reply
