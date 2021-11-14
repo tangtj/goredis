@@ -2,7 +2,7 @@ package parse
 
 import (
 	"bufio"
-	"goredis/interface/cmd"
+	"goredis/inf/cmd"
 	"strconv"
 	"strings"
 )
