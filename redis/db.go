@@ -15,13 +15,16 @@ type Db struct {
 var _cmdMap = map[string]cmd.CmderFunc{
 	"ping": cmder.Ping,
 	"get":  cmder.Get,
+	"set":  cmder.Set,
 }
 
 // MakeDb 创建一个Db
 func MakeDb() *Db {
-	return &Db{
+	d := &Db{
 		cmdMap: _cmdMap,
 	}
+	d.Data = dict.NewDict(16)
+	return d
 }
 
 func (db *Db) Exec(c string, args [][]byte) cmd.Reply {

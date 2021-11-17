@@ -19,6 +19,7 @@ type Handler struct {
 
 func NewHandler(options ...Apply) server.Handler {
 	h := Handler{}
+	h.Db = redis.MakeDb()
 	o := NewOption()
 	for _, f := range options {
 		f(o)
