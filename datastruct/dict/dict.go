@@ -17,11 +17,16 @@ type Dict struct {
 	shards     []*Shard
 	shardCount int
 	count      int
+	locker     sync.RWMutex
 }
 
 type Shard struct {
 	table  map[string]interface{}
 	locker sync.RWMutex
+}
+
+func (dict *Dict) Locker() *sync.RWMutex {
+	return &dict.locker
 }
 
 func (dict *Dict) Find(key string) (interface{}, bool) {
