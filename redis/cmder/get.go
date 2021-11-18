@@ -2,15 +2,14 @@ package cmder
 
 import (
 	"goredis/inf"
-	"goredis/inf/cmd"
 	"goredis/redis/reply"
 )
 
-func Get(db inf.DB, args [][]byte) cmd.Reply {
+func Get(c *inf.Client, args [][]byte) inf.Reply {
 	if len(args) != 1 {
 		return reply.MakeErrReply("error params")
 	}
-	val, has := db.GetData().Find(string(args[0]))
+	val, has := c.Db.GetData().Find(string(args[0]))
 	// 不存在这个 key
 	if !has {
 		return reply.NilReply

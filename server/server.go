@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"goredis/inf/server"
+	"goredis/inf"
 	"log"
 	"net"
 )
@@ -11,7 +11,7 @@ type Config struct {
 	Address string `yaml:"address"`
 }
 
-func ListenAndHandleServe(cfg Config, handler server.Handler) error {
+func ListenAndHandleServe(cfg Config, handler inf.Handler) error {
 	listener, err := net.Listen("tcp", cfg.Address)
 	if err != nil {
 		log.Panicf("listen addr : %s , err : %s", cfg.Address, err)

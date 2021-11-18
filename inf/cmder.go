@@ -1,8 +1,4 @@
-package cmd
-
-import (
-	"goredis/inf"
-)
+package inf
 
 const (
 	SimpleString = '+'
@@ -14,4 +10,4 @@ const (
 	CRLF         = "\r\n"
 )
 
-type CmderFunc func(db inf.DB, args [][]byte) Reply
+type CmderFunc func(c *Client, args [][]byte) Reply
