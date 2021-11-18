@@ -7,4 +7,5 @@ var CmdMap = map[string]inf.CmderFunc{
 	"get":   Get,
 	"set":   Set,
 	"setnx": SetNX,
+	"setex": SetEX,
 }
