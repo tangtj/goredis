@@ -1,26 +1,25 @@
-package handler
+package redis
 
 import (
 	"bufio"
 	"context"
-	"goredis/inf/cmd"
-	"goredis/inf/server"
-	"goredis/redis"
+	"goredis/inf"
+	"goredis/redis/handler"
 	"goredis/redis/parse"
 	"log"
 	"net"
 )
 
-var _ server.Handler = (*Handler)(nil)
+var _ inf.Handler = (*Handler)(nil)
 
 type Handler struct {
-	Db *redis.Db
+	server *Server
 }
 
-func NewHandler(options ...Apply) server.Handler {
+func NewHandler(options ...handler.Apply) inf.Handler {
 	h := Handler{}
-	h.Db = redis.MakeDb()
-	o := NewOption()
+	h.server = MakeServer()
+	o := handler.NewOption()
 	for _, f := range options {
 		f(o)
 	}
@@ -33,6 +32,9 @@ func (h *Handler) Close() error {
 
 func (h *Handler) Handle(ctx context.Context, conn net.Conn) {
 	reader := bufio.NewReader(conn)
+	client := &inf.Client{
+		Db: h.server.DB[0],
+	}
 	for {
 		b, err := reader.ReadByte()
 		if err != nil {
@@ -40,12 +42,12 @@ func (h *Handler) Handle(ctx context.Context, conn net.Conn) {
 			return
 		}
 		switch b {
-		case cmd.Array:
+		case inf.Array:
 			// *1\r\n$4\r\nping\r\n
 			r := parse.Array(reader)
 
 			c := string(r[0])
-			reply := h.Db.Exec(c, r[1:])
+			reply := h.server.Exec(client, c, r[1:])
 			conn.Write(reply.Reply())
 		}
 	}
