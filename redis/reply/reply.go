@@ -37,6 +37,10 @@ func (r *IntReply) Reply() []byte {
 	return []byte(":" + strconv.Itoa(r.number) + inf.CRLF)
 }
 
+func MakeIntReply(num int) *IntReply {
+	return &IntReply{number: num}
+}
+
 type BulkReply struct {
 	string string
 }

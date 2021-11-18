@@ -13,5 +13,5 @@ func Set(c *inf.Client, command string, args [][]byte) inf.Reply {
 	if err != nil {
 		return reply.MakeErrReply(err.Error())
 	}
-	return reply.OKReply
+	return reply.MakeIntReply(1)
 }

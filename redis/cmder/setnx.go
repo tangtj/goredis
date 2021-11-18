@@ -16,8 +16,8 @@ func SetNX(c *inf.Client, command string, args [][]byte) inf.Reply {
 	value := string(args[1])
 	_, exit := d.Find(key)
 	if exit {
-		return &reply.ErrReply{Status: "111"}
+		return reply.MakeIntReply(0)
 	}
 	d.Add(key, value)
-	return reply.OKReply
+	return reply.MakeIntReply(1)
 }
