@@ -19,6 +19,16 @@ func (s *Server) Exec(c *inf.Client, command string, args [][]byte) inf.Reply {
 	return reply.MakeErrReply("unSupport command")
 }
 
+func (s *Server) GetInfo() inf.ServerInfo {
+	return inf.ServerInfo{
+		DbNum: len(s.DB),
+	}
+}
+
+func (s *Server) GetDB() []*inf.DB {
+	return s.DB
+}
+
 func MakeServer() *Server {
 	s := &Server{}
 	dbs := make([]*inf.DB, 16)
