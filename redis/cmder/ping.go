@@ -5,7 +5,7 @@ import (
 	"goredis/redis/reply"
 )
 
-func Ping(_ *inf.Client, args [][]byte) inf.Reply {
+func Ping(_ *inf.Client, _ string, args [][]byte) inf.Reply {
 	if len(args) == 0 {
 		return reply.PongReply
 	} else {
