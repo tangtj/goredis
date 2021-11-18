@@ -5,7 +5,7 @@ import (
 	"goredis/redis/reply"
 )
 
-func Set(c *inf.Client, args [][]byte) inf.Reply {
+func Set(c *inf.Client, command string, args [][]byte) inf.Reply {
 	if len(args) < 1 {
 		return reply.MakeErrReply("err redis")
 	}
@@ -13,5 +13,5 @@ func Set(c *inf.Client, args [][]byte) inf.Reply {
 	if err != nil {
 		return reply.MakeErrReply(err.Error())
 	}
-	return reply.OKReply
+	return reply.MakeIntReply(1)
 }

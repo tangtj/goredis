@@ -5,7 +5,7 @@ import (
 	"goredis/redis/reply"
 )
 
-func Get(c *inf.Client, args [][]byte) inf.Reply {
+func Get(c *inf.Client, _ string, args [][]byte) inf.Reply {
 	if len(args) != 1 {
 		return reply.MakeErrReply("error params")
 	}

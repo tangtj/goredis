@@ -14,7 +14,7 @@ type Server struct {
 
 func (s *Server) Exec(c *inf.Client, command string, args [][]byte) inf.Reply {
 	if cmd, ok := s.cmderMap[command]; ok {
-		return cmd(c, args)
+		return cmd(c, command, args)
 	}
 	return reply.MakeErrReply("unSupport command")
 }

@@ -10,4 +10,4 @@ const (
 	CRLF         = "\r\n"
 )
 
-type CmderFunc func(c *Client, args [][]byte) Reply
+type CmderFunc func(c *Client, command string, args [][]byte) Reply
