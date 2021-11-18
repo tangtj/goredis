@@ -7,7 +7,7 @@ import (
 )
 
 type Server struct {
-	DB []inf.DB
+	DB []*inf.DB
 
 	cmderMap map[string]inf.CmderFunc
 }
@@ -21,9 +21,9 @@ func (s *Server) Exec(c *inf.Client, command string, args [][]byte) inf.Reply {
 
 func MakeServer() *Server {
 	s := &Server{}
-	dbs := make([]inf.DB, 16)
+	dbs := make([]*inf.DB, 16)
 	for i := 0; i < len(dbs); i++ {
-		dbs[i] = MakeDb()
+		dbs[i] = inf.MakeDb()
 	}
 	s.DB = dbs
 	s.cmderMap = cmder.CmdMap
