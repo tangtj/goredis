@@ -1,9 +1,11 @@
 package reply
 
-import "goredis/inf/cmd"
+import (
+	"goredis/inf"
+)
 
-var PongReply = (cmd.Reply)(MakeSimpleStrReply("PONG"))
+var PongReply = (inf.Reply)(MakeSimpleStrReply("PONG"))
 
-var OKReply = (cmd.Reply)(MakeSimpleStrReply("OK"))
+var OKReply = (inf.Reply)(MakeSimpleStrReply("OK"))
 
-var NilReply = (cmd.Reply)(&bytesReply{bytes: []byte("$-1\r\n")})
+var NilReply = (inf.Reply)(&bytesReply{bytes: []byte("$-1\r\n")})
