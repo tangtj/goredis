@@ -33,7 +33,8 @@ func (h *Handler) Close() error {
 func (h *Handler) Handle(ctx context.Context, conn net.Conn) {
 	reader := bufio.NewReader(conn)
 	client := &inf.Client{
-		Db: h.server.DB[0],
+		Db:     h.server.DB[0],
+		Server: h.server,
 	}
 	for {
 		b, err := reader.ReadByte()
