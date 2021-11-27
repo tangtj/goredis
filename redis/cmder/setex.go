@@ -27,7 +27,11 @@ func SetEX(c *inf.Client, _ string, args [][]byte) inf.Reply {
 
 	expire.Add(key, now)
 
-	value := string(args[2])
+	value := &inf.DataEntity{
+		Type: inf.StringType,
+		TTl:  0,
+		Val:  string(args[2]),
+	}
 	d.Add(key, value)
 	return reply.OKReply
 }

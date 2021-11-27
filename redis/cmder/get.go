@@ -23,6 +23,6 @@ func Get(c *inf.Client, _ string, args [][]byte) inf.Reply {
 	if h && now > ts.(int64) {
 		return reply.NilReply
 	}
-	v := val.(string)
-	return reply.MakeBulkReply(v)
+	v := val.(*inf.DataEntity)
+	return reply.MakeBulkReply(v.Val.(string))
 }

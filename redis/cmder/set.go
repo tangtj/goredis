@@ -6,12 +6,19 @@ import (
 )
 
 func Set(c *inf.Client, command string, args [][]byte) inf.Reply {
-	if len(args) < 1 {
-		return reply.MakeErrReply("err redis")
+	if len(args) <= 1 {
+		return reply.MakeErrReply("ERR wrong number of arguments for 'set' command")
 	}
-	err := c.Db.GetData().Add(string(args[0]), string(args[1]))
+
+	key := string(args[0])
+	value := &inf.DataEntity{
+		Type: inf.StringType,
+		TTl:  0,
+		Val:  string(args[1]),
+	}
+	err := c.Db.GetData().Add(key, value)
 	if err != nil {
 		return reply.MakeErrReply(err.Error())
 	}
-	return reply.MakeIntReply(1)
+	return reply.OKReply
 }

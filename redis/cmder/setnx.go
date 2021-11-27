@@ -13,10 +13,15 @@ func SetNX(c *inf.Client, command string, args [][]byte) inf.Reply {
 	d := c.Db.GetData()
 
 	key := string(args[0])
-	value := string(args[1])
 	_, exit := d.Find(key)
 	if exit {
 		return reply.MakeIntReply(0)
+	}
+
+	value := &inf.DataEntity{
+		Type: inf.StringType,
+		TTl:  0,
+		Val:  string(args[2]),
 	}
 	d.Add(key, value)
 	return reply.MakeIntReply(1)
