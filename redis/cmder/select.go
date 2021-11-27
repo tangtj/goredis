@@ -6,14 +6,14 @@ import (
 	"strconv"
 )
 
-func Select(c *inf.Client, _ string, args [][]byte) inf.Reply {
+func Select(c *inf.Client, cmd string, args [][]byte) inf.Reply {
 	s := string(args[0])
 	if len(s) <= 0 {
-		return reply.MakeErrReply("ERR wrong number of arguments for 'select' command")
+		return reply.ErrArgsNumber(cmd)
 	}
 	num, err := strconv.Atoi(s)
 	if err != nil {
-		return reply.MakeErrReply("ERR value is not an integer or out of range")
+		return reply.ErrNum
 	}
 	info := c.Server.GetInfo()
 

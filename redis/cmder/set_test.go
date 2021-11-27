@@ -9,7 +9,7 @@ import (
 
 func TestSet(t *testing.T) {
 	convey.Convey("test set command", t, func() {
-		command := "setex"
+		command := "set"
 
 		client := &inf.Client{
 			Db: inf.MakeDb(),

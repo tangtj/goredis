@@ -7,7 +7,7 @@ import (
 
 func Set(c *inf.Client, command string, args [][]byte) inf.Reply {
 	if len(args) <= 1 {
-		return reply.MakeErrReply("ERR wrong number of arguments for 'set' command")
+		return reply.ErrArgsNumber(command)
 	}
 
 	key := string(args[0])
