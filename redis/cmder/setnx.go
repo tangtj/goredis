@@ -6,6 +6,11 @@ import (
 )
 
 func SetNX(c *inf.Client, command string, args [][]byte) inf.Reply {
+
+	if len(args) <= 1 {
+		return reply.ErrArgsNumber(command)
+	}
+
 	locker := c.Db.GetData().Locker()
 	locker.Lock()
 	defer locker.Unlock()

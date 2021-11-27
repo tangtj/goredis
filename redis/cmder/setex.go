@@ -7,13 +7,13 @@ import (
 	"time"
 )
 
-func SetEX(c *inf.Client, _ string, args [][]byte) inf.Reply {
+func SetEX(c *inf.Client, cmd string, args [][]byte) inf.Reply {
 	d := c.Db.GetData()
 	expire := c.Db.GetExpire()
 
 	// 判断是否有效
 	if len(args) != 3 {
-		return reply.MakeErrReply("ERR wrong number of arguments for 'setex' command")
+		return reply.ErrArgsNumber(cmd)
 	}
 
 	key := string(args[0])
@@ -21,7 +21,7 @@ func SetEX(c *inf.Client, _ string, args [][]byte) inf.Reply {
 	s := string(args[1])
 	second, err := strconv.Atoi(s)
 	if err != nil {
-		return reply.MakeErrReply("ERR value is not an integer or out of range")
+		return reply.ErrNum
 	}
 	now := time.Now().Add(time.Duration(second) * time.Second).UnixMilli()
 

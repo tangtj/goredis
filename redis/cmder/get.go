@@ -6,9 +6,9 @@ import (
 	"time"
 )
 
-func Get(c *inf.Client, _ string, args [][]byte) inf.Reply {
+func Get(c *inf.Client, cmd string, args [][]byte) inf.Reply {
 	if len(args) != 1 {
-		return reply.MakeErrReply("error params")
+		return reply.ErrArgsNumber(cmd)
 	}
 
 	key := string(args[0])
