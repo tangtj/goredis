@@ -55,7 +55,7 @@ func TestSetEX(t *testing.T) {
 
 		convey.Convey("test db value", func() {
 			value, _ := d.Find("key")
-			convey.So(value.(string), convey.ShouldEqual, "value")
+			convey.So(value.(*inf.DataEntity).Val, convey.ShouldEqual, "value")
 		})
 
 		convey.Convey("test expire value", func() {
