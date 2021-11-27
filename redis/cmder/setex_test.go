@@ -5,6 +5,7 @@ import (
 	"goredis/inf"
 	"goredis/redis/reply"
 	"testing"
+	"time"
 )
 
 func TestSetEX(t *testing.T) {
@@ -16,6 +17,8 @@ func TestSetEX(t *testing.T) {
 		client := &inf.Client{
 			Db: inf.MakeDb(),
 		}
+
+		now := time.Now().UnixMilli()
 
 		args := [][]byte{
 			[]byte("key"),
@@ -31,6 +34,25 @@ func TestSetEX(t *testing.T) {
 			convey.So(r.Reply(), convey.ShouldResemble, reply.OKReply.Reply())
 		})
 
+		convey.Convey("test setex err time", func() {
+			r := SetEX(client, command, [][]byte{
+				[]byte("key"),
+				[]byte("aa"),
+				[]byte("value"),
+			})
+			convey.So(r.Reply(), convey.ShouldResemble, reply.MakeErrReply("ERR value is not an integer or out of range").Reply())
+		})
+
+		convey.Convey("test setex err args", func() {
+			r := SetEX(client, command, [][]byte{
+				[]byte("key"),
+				[]byte("aa"),
+				[]byte("value"),
+				[]byte(" "),
+			})
+			convey.So(r.Reply(), convey.ShouldResemble, reply.MakeErrReply("ERR wrong number of arguments for 'setex' command").Reply())
+		})
+
 		convey.Convey("test db value", func() {
 			value, _ := d.Find("key")
 			convey.So(value.(string), convey.ShouldEqual, "value")
@@ -38,7 +60,7 @@ func TestSetEX(t *testing.T) {
 
 		convey.Convey("test expire value", func() {
 			value, _ := e.Find("key")
-			convey.So(value.(int), convey.ShouldEqual, 10)
+			convey.So(value.(int64), convey.ShouldBeGreaterThan, 10+now)
 		})
 
 	})
