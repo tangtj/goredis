@@ -62,7 +62,9 @@ func (l *List) AddNodeTail(value interface{}) *List {
 }
 
 func (l *List) DelNode(node *Node) *List {
-
+	if node == nil {
+		return l
+	}
 	if node.prev != nil {
 		node.prev.next = node.next
 	} else {
