@@ -4,6 +4,7 @@ import (
 	"goredis/inf"
 	"goredis/redis/cmder"
 	"goredis/redis/reply"
+	"strings"
 )
 
 type Server struct {
@@ -13,6 +14,7 @@ type Server struct {
 }
 
 func (s *Server) Exec(c *inf.Client, command string, args [][]byte) inf.Reply {
+	command = strings.ToLower(command)
 	if cmd, ok := s.cmderMap[command]; ok {
 		return cmd(c, command, args)
 	}
