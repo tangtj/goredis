@@ -9,4 +9,5 @@ var CmdMap = map[string]inf.CmderFunc{
 	"setnx":  SetNX,
 	"setex":  SetEX,
 	"strlen": StrLen,
+	"incr":   Incr,
 }
