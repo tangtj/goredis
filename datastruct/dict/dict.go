@@ -46,6 +46,18 @@ func (dict *Dict) Add(key string, val interface{}) error {
 	return nil
 }
 
+func (dict *Dict) Del(key string) bool {
+	h := genCaseHashFunction(key)
+	idx := (dict.shardCount - 1) & h
+	shard := dict.shards[idx]
+	_, ok := shard.table[key]
+	if !ok {
+		return false
+	}
+	delete(shard.table, key)
+	return true
+}
+
 func genCaseHashFunction(key string) int {
 	var hash int = 5381
 	lens := len(key)
@@ -86,23 +98,3 @@ func computeCapacity(param int) int {
 		return n + 1
 	}
 }
-
-/* Thomas Wang's 32 bit Mix Function */
-func dictIntHashFunction(key int) uint {
-	var hash = uint(key)
-	hash = (hash << 0x10) + hash
-	hash = hash ^ (hash >> 0x1F)
-	hash = (hash << 0x10) + hash
-	hash = hash ^ (hash >> 0x1F)
-	return hash
-}
-
-//func dictIntHashFunction(key uint) {
-//key += ~(key << 15)
-//	key ^=  (key >> 10)
-//	key +=  (key << 3)
-//	key ^=  (key >> 6)
-//	key += ~(key << 11)
-//	key ^=  (key >> 16)
-//	return key
-//}
