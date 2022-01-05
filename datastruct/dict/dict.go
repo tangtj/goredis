@@ -33,6 +33,10 @@ func (dict *Dict) Find(key string) (interface{}, bool) {
 	h := genCaseHashFunction(key)
 	idx := (dict.shardCount - 1) & h
 	shard := dict.shards[idx]
+
+	shard.locker.RLock()
+	defer shard.locker.RUnlock()
+
 	val, ok := shard.table[key]
 	return val, ok
 }
@@ -42,14 +46,37 @@ func (dict *Dict) Add(key string, val interface{}) error {
 	h := genCaseHashFunction(key)
 	idx := (dict.shardCount - 1) & h
 	shard := dict.shards[idx]
+
+	shard.locker.Lock()
+	defer shard.locker.Unlock()
+
 	shard.table[key] = val
 	return nil
+}
+
+func (dict *Dict) PutIfAbsent(key string, val interface{}) (bool, error) {
+	h := genCaseHashFunction(key)
+	idx := (dict.shardCount - 1) & h
+	shard := dict.shards[idx]
+
+	shard.locker.Lock()
+	defer shard.locker.Unlock()
+
+	if _, ok := shard.table[key]; ok {
+		return false, nil
+	}
+	shard.table[key] = val
+	return true, nil
 }
 
 func (dict *Dict) Del(key string) bool {
 	h := genCaseHashFunction(key)
 	idx := (dict.shardCount - 1) & h
 	shard := dict.shards[idx]
+
+	shard.locker.Lock()
+	defer shard.locker.Unlock()
+
 	_, ok := shard.table[key]
 	if !ok {
 		return false
@@ -59,7 +86,7 @@ func (dict *Dict) Del(key string) bool {
 }
 
 func genCaseHashFunction(key string) int {
-	var hash int = 5381
+	var hash = 5381
 	lens := len(key)
 	chars := []rune(strings.ToLower(key))
 	for i := lens - 1; i >= 0; i-- {

@@ -54,3 +54,22 @@ func TestDict_Del(t *testing.T) {
 		})
 	})
 }
+
+func TestDict_PutIfAbsent(t *testing.T) {
+	convey.Convey("test PutIfAbsent", t, func() {
+		d := NewDict(100)
+
+		convey.Convey("put if absent", func() {
+			d.PutIfAbsent("a", 1)
+			v, has := d.Find("a")
+			convey.So(has, convey.ShouldBeTrue)
+			convey.So(v, convey.ShouldEqual, 1)
+		})
+
+		convey.Convey("put if exists", func() {
+			d.Add("b", 2)
+			has, _ := d.PutIfAbsent("b", 2)
+			convey.So(has, convey.ShouldBeFalse)
+		})
+	})
+}

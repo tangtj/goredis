@@ -28,6 +28,10 @@ func SetNX(c *inf.Client, command string, args [][]byte) inf.Reply {
 		TTl:  0,
 		Val:  string(args[2]),
 	}
-	d.Add(key, value)
-	return reply.MakeIntReply(1)
+	ok, _ := d.PutIfAbsent(key, value)
+	if ok {
+		return reply.MakeIntReply(1)
+	} else {
+		return reply.MakeIntReply(0)
+	}
 }
