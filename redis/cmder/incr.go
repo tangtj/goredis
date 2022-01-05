@@ -18,29 +18,36 @@ func Incr(c *inf.Client, cmd string, args [][]byte) inf.Reply {
 
 	data := db.GetData()
 
-	val, has := data.Find(key)
-	if !has {
+	ok, _ := data.PutIfAbsent(key, &inf.DataEntity{
+		Type: inf.StringType,
+		TTl:  0,
+		Val:  "1",
+	})
+	if ok {
+		return reply.MakeIntReply(1)
+	} else {
 		data.Locker().Lock()
 		defer data.Locker().Unlock()
 
-		data.Add(key, &inf.DataEntity{
-			Type: inf.StringType,
-			TTl:  0,
-			Val:  "1",
-		})
-		return reply.MakeIntReply(1)
-	}
+		val, exits := data.Find(key)
+		if exits {
+			entity := val.(*inf.DataEntity)
+			v := entity.Val.(string)
 
-	data.Locker().Lock()
-	defer data.Locker().Unlock()
-	entity := val.(*inf.DataEntity)
-	v := entity.Val.(string)
-
-	num, err := strconv.Atoi(v)
-	if err != nil {
-		return reply.ErrNum
-	} else {
-		entity.Val = strconv.Itoa(num + 1)
+			num, err := strconv.Atoi(v)
+			if err != nil {
+				return reply.ErrNum
+			} else {
+				entity.Val = strconv.Itoa(num + 1)
+			}
+			return reply.MakeIntReply(num + 1)
+		} else {
+			data.Add(key, &inf.DataEntity{
+				Type: inf.StringType,
+				TTl:  0,
+				Val:  "1",
+			})
+			return reply.MakeIntReply(1)
+		}
 	}
-	return reply.MakeIntReply(num + 1)
 }
