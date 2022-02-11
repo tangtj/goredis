@@ -11,5 +11,9 @@ var CmdMap = map[string]inf.CmderFunc{
 	"strlen": StrLen,
 	"incr":   Incr,
 	"del":    Del,
-	"select": Select,
+  "select": Select,
+
+	// string command
+	"append": Append,
+  
 }
