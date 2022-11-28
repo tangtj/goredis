@@ -7,3 +7,8 @@
 - get
 - set
 - setnx
+- select
+- incr
+- incrby
+- append
+- strlen
